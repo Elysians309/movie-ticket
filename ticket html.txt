@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Ticket</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body style="text-align:center; font-family: Arial, sans-serif; background:#f0f0f0; padding:50px;">
+
+  <div style="width:400px; margin:auto; padding:20px; background:#fff; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,0.2);">
+    <h1 style="color:#ff4d4d;">🎫 Movie Ticket 🎫</h1>
+    <p id="ticketCode" style="font-size:18px;"><b>Unique Code:</b> </p>
+    <img id="qrCode" src="" style="margin:20px 0;" />
+    <br>
+    <button onclick="downloadTicket()" style="padding:10px 20px; background:#ff4d4d; color:white; border:none; border-radius:8px; font-size:16px;">Download PDF</button>
+  </div>
+
+<script>
+// Function to generate a random 6-character code
+function generateCode() {
+  return Math.random().toString(36).substring(2, 8).toUpperCase();
+}
+
+// Generate unique code and QR code
+const code = generateCode();
+document.getElementById('ticketCode').innerHTML = "<b>Unique Code:</b> " + code;
+document.getElementById('qrCode').src = "https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=" + code;
+
+// Function to generate PDF and download
+function downloadTicket() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  doc.setFontSize(22);
+  doc.text("🎫 Movie Ticket 🎫", 105, 30, null, null, "center");
+  
+  doc.setFontSize(16);
+  doc.text("Unique Code: " + code, 105, 50, null, null, "center");
+  
+  // Add QR code image
+  const qr = document.getElementById('qrCode');
+  doc.addImage(qr.src, 'PNG', 70, 60, 70, 70);
+  
+  doc.save("Ticket_" + code + ".pdf");
+}
+</script>
+
+</body>
+</html>
